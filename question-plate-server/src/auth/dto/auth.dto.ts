@@ -1,4 +1,5 @@
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsUniqueEmail } from '../validators/unique-email.validator';
 
 export class LoginDto {
   @IsEmail()
@@ -10,6 +11,10 @@ export class LoginDto {
 }
 
 export class RegisterDto extends LoginDto {
+  @IsEmail()
+  @IsUniqueEmail({ message: 'Email already exists' })
+  email: string;
+
   @IsString()
   @MinLength(3)
   @MaxLength(20)
