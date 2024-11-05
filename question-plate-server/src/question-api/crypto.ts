@@ -23,24 +23,25 @@ export const hashQuestion = (question: string): string => {
   return iv.toString('hex') + ':' + encrypted;
 };
 
+export const decryptQuestion = (hashedQuestion: string): string => {
+  const [ivHex, encrypted] = hashedQuestion.split(':');
+  const iv = Buffer.from(ivHex, 'hex');
+  const decipher = crypto.createDecipheriv(
+    'aes-256-cbc',
+    Buffer.from(ENCRYPTION_KEY),
+    iv
+  );
+
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+
+  return decrypted;
+};
+
 export const compareQuestion = (question: string, hashedQuestion: string): boolean => {
   try {
-    // Split iv and encrypted text
-    const [ivHex, encrypted] = hashedQuestion.split(':');
-    const iv = Buffer.from(ivHex, 'hex');
+    const decrypted = decryptQuestion(hashedQuestion);
     
-    // Create decipher
-    const decipher = crypto.createDecipheriv(
-      'aes-256-cbc',
-      Buffer.from(ENCRYPTION_KEY),
-      iv
-    );
-    
-    // Decrypt the stored question
-    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    
-    // Compare decrypted value with provided question
     return decrypted === question;
   } catch (error) {
     return false;

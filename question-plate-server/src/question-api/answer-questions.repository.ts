@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Knex } from 'knex';
 import { AnsweredQuestion } from './types';
-import { compareQuestion, hashQuestion } from './crypto';
+import { compareQuestion, decryptQuestion, hashQuestion } from './crypto';
 
 @Injectable()
 export class AnswerQuestionsRepository {
@@ -19,7 +19,7 @@ export class AnswerQuestionsRepository {
       is_correct,
     });
 
-    return { is_correct, answered_before };
+    return { is_correct, answered_before, correct_answer: decryptQuestion(data.correct_answer_hash) };
   }
 
   // Probably not needed

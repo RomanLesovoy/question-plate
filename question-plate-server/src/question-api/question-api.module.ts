@@ -3,6 +3,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { ExternalApiService } from './question-api.service';
 import { QuestionApiController } from './question-api.controller';
+import { AnswerQuestionsRepository } from './answer-questions.repository';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { QuestionApiController } from './question-api.controller';
     }),
   ],
   controllers: [QuestionApiController],
-  providers: [ExternalApiService],
+  providers: [ExternalApiService, AnswerQuestionsRepository],
   exports: [ExternalApiService],
 })
 export class QuestionApiModule {}

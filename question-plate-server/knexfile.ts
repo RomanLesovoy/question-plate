@@ -20,5 +20,4 @@ module.exports = {
       tableName: 'knex_migrations',
     },
   },
-  // Добавьте другие окружения при необходимости (production, testing)
-}; 
+};

@@ -1,11 +1,15 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import knex from 'knex';
+import { initTables } from './init-tables';
+import { initDatabase } from './init-database';
 
 const databaseProvider = {
   provide: 'KNEX_CONNECTION',
   useFactory: async (configService: ConfigService) => {
-    return knex({
+    await initDatabase(configService);
+
+    const knexInstance = knex({
       client: 'postgresql',
       connection: {
         host: configService.get('database.host'),
@@ -16,6 +20,10 @@ const databaseProvider = {
       },
       pool: { min: 2, max: 10 },
     });
+
+    await initTables(knexInstance);
+
+    return knexInstance;
   },
   inject: [ConfigService],
 };
@@ -26,4 +34,4 @@ const databaseProvider = {
   providers: [databaseProvider],
   exports: ['KNEX_CONNECTION'],
 })
-export class DatabaseModule {} 
+export class DatabaseModule {}
