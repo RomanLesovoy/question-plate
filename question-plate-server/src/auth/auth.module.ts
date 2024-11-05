@@ -7,6 +7,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import validators from './validators';
+import { ModuleRef } from '@nestjs/core';
+import { useContainer } from 'class-validator';
 
 @Module({
   imports: [
@@ -27,4 +29,8 @@ import validators from './validators';
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule {
+  constructor(private moduleRef: ModuleRef) {
+    useContainer(this.moduleRef, { fallbackOnErrors: true });
+  }
+}

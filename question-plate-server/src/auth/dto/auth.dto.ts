@@ -12,7 +12,7 @@ export class LoginDto {
 
 export class RegisterDto extends LoginDto {
   @IsEmail()
-  @IsUniqueEmail({ message: 'Email already exists' })
+  @IsUniqueEmail({ message: 'Email уже существует' })
   email: string;
 
   @IsString()

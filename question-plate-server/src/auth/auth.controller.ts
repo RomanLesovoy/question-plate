@@ -54,7 +54,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({ 
     status: HttpStatus.CREATED, 
-    description: 'User successfully registered',
+    description: 'successfully registered',
     type: AuthResponseDto 
   })
   async register(

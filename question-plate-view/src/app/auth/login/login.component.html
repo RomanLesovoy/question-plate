@@ -1,0 +1,24 @@
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input type="email" formControlName="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Пароль</ion-label>
+    <ion-input type="password" formControlName="password"></ion-input>
+  </ion-item>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p class="ion-text-center">{{ errorMessage }}</p>
+  </ion-text>
+
+  <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="ion-margin-top">
+    Войти
+  </ion-button>
+
+  <ion-button expand="block" fill="clear" (click)="goToRegister()">
+    Регистрация
+  </ion-button>
+</form>
