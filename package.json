@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@js-emitter/event-emitter-light": "^1.0.3"
+  }
+}

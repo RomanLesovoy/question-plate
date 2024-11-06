@@ -7,12 +7,12 @@ const routes: Routes = [
   {
     path: 'quiz',
     component: QuizComponent,
-    title: 'Викторина'
+    title: 'Quiz'
   },
   // {
   //   path: 'rating',
   //   component: RatingComponent,
-  //   title: 'Рейтинг'
+  //   title: 'Rating'
   // },
   {
     path: '',

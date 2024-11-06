@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { QuestionDto, QuestionApiParams, Category, AnsweredQuestionResponse, AnswerQuestionParams, QuestionType } from './dto';
 import { BehaviorSubject, filter, tap, switchMap } from 'rxjs';
-
+import { EventEmitterSingleton } from '@js-emitter/event-emitter-light';
 @Injectable({
   providedIn: 'root'
 })
@@ -22,15 +22,20 @@ export class QuestionsService {
   public readonly currentQuestion$ = this.currentQuestion.asObservable().pipe(filter(Boolean));
 
   constructor(private readonly http: HttpClient) {
+    const emitter = new EventEmitterSingleton();
+
     this.getCategories$().subscribe(categories => {
       this.categories.next(categories);
     });
 
     this.currentCategory$.pipe(
+      tap(category => emitter.emit('topic', category?.name)),
       switchMap(category => this.getQuestions$({ category: category?.id })),
-      tap(questions => this.questions.next(questions)),
-      tap(questions => this.currentQuestion.next(questions[0])),
-      tap(() => this.currentQuestionIndex = 0)
+      tap(questions => {
+        this.questions.next(questions)
+        this.currentQuestion.next(questions[0])
+        this.currentQuestionIndex = 0;
+      }),
     ).subscribe();
   }
 

@@ -1,0 +1,13 @@
+section.answers {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  ion-button {
+    flex: 1;
+  }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+}
