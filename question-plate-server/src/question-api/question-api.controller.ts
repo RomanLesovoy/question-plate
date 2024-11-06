@@ -5,19 +5,18 @@ import {
   UseGuards,
   HttpStatus,
   ParseIntPipe,
-  Request,
   Body,
   Post
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ExternalApiService } from './question-api.service';
-import { QuestionApiParams, QuestionDifficulty, QuestionType, Category, QuestionDto } from './types';
+import { QuestionApiParams, QuestionDifficulty, QuestionType, Category, QuestionDto, AnsweredQuestionResponse } from './types';
 import { AnswerQuestionsRepository } from './answer-questions.repository';
 import { User } from 'src/auth/user.decorator';
 
 @ApiTags('Questions API')
-@Controller('questions-api')
+@Controller('questions')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class QuestionApiController {
@@ -43,7 +42,7 @@ export class QuestionApiController {
     @Query('type') type?: QuestionType,
   ): Promise<QuestionDto[]> {
     const params: QuestionApiParams = {
-      amount,
+      amount: amount || 10,
       category,
       difficulty,
       type
@@ -80,17 +79,23 @@ export class QuestionApiController {
 
   @Post('answer')
   @ApiOperation({ summary: 'Save user answer' })
+  @ApiResponse({ 
+    status: HttpStatus.OK, 
+    description: 'Returns result of the answer',
+  })
   async saveAnswer(
-    @User('user_id') userId: number,
+    @User('userId') userId: number,
     @Body() answerData: {
       categoryId: number;
       question: string;
       correctAnswerHash: string;
+      answer: string | boolean;
     }
-  ) {
+  ): Promise<AnsweredQuestionResponse> {
     const result = await this.answerQuestionsRepository.saveAnsweredQuestion({
-      user_id: userId,
+      userId: userId,
       question: answerData.question,
+      answer: answerData.answer,
       category_id: answerData.categoryId,
       correct_answer_hash: answerData.correctAnswerHash,
     });

@@ -1,0 +1,21 @@
+<section class="question" *ngIf="currentQuestion">
+  <h2>{{ currentQuestion.question }}</h2>
+
+  <div class="answers" *ngIf="!result">
+    @if (currentQuestion.type === this.questionType.BOOLEAN) {
+      <ion-button expand="block" (click)="answer(true)">Yes</ion-button>
+      <ion-button expand="block" (click)="answer(false)">No</ion-button>
+    } @else {
+      @for (answerOption of currentQuestion.answers; track answerOption) {
+        <ion-button expand="block" (click)="answer(answerOption)">{{ answerOption }}</ion-button>
+      }
+    }
+  </div>
+
+  <div class="result" *ngIf="result">
+    <ion-text [color]="result.is_correct ? 'success' : 'danger'">
+      <h3>{{ result.is_correct ? 'Correct!' : 'Incorrect!' }}</h3>
+      <p>Correct answer: {{ result.correct_answer }}</p>
+    </ion-text>
+  </div>
+</section>

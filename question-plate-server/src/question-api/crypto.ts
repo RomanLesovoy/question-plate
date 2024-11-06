@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'your-secret-key-32-chars-long!!!';
 const IV_LENGTH = 16; // For AES, this is always 16
 
-export const hashQuestion = (question: string): string => {
+export const hashAnswer = (answer: string): string => {
   // Generate random initialization vector
   const iv = crypto.randomBytes(IV_LENGTH);
   
@@ -15,16 +15,16 @@ export const hashQuestion = (question: string): string => {
     iv
   );
   
-  // Encrypt the question
-  let encrypted = cipher.update(question, 'utf8', 'hex');
+  // Encrypt the answer
+  let encrypted = cipher.update(answer, 'utf8', 'hex');
   encrypted += cipher.final('hex');
   
   // Return iv + encrypted (iv needed for decryption)
   return iv.toString('hex') + ':' + encrypted;
 };
 
-export const decryptQuestion = (hashedQuestion: string): string => {
-  const [ivHex, encrypted] = hashedQuestion.split(':');
+export const decryptAnswer = (hashedAnswer: string): string => {
+  const [ivHex, encrypted] = hashedAnswer.split(':');
   const iv = Buffer.from(ivHex, 'hex');
   const decipher = crypto.createDecipheriv(
     'aes-256-cbc',
@@ -38,11 +38,11 @@ export const decryptQuestion = (hashedQuestion: string): string => {
   return decrypted;
 };
 
-export const compareQuestion = (question: string, hashedQuestion: string): boolean => {
+export const compareAnswer = (answer: string, hashedAnswer: string): boolean => {
   try {
-    const decrypted = decryptQuestion(hashedQuestion);
+    const decrypted = decryptAnswer(hashedAnswer);
     
-    return decrypted === question;
+    return decrypted === answer;
   } catch (error) {
     return false;
   }

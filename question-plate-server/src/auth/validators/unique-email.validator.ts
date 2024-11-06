@@ -21,7 +21,7 @@ export class UniqueEmailConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `Email ${args.value} уже существует`;
+    return `Email ${args.value} already exists`;
   }
 }
 

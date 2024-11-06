@@ -1,0 +1,9 @@
+section.categories {
+  ion-item {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--ion-color-primary);
+    }
+  }
+}

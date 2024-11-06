@@ -28,11 +28,9 @@ export class RegisterComponent {
   async onSubmit() {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/questions']);
-        },
+        next: () => {},
         error: (error) => {
-          this.errorMessage = error.error?.message || 'Ошибка регистрации';
+          this.errorMessage = error.error?.message || 'Registration error';
         }
       });
     }

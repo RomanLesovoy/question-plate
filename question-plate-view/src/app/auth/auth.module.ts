@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
-import { AuthService } from './auth.service';
 import { RegisterComponent } from './register/register.component';
 
 @NgModule({
@@ -18,9 +17,7 @@ import { RegisterComponent } from './register/register.component';
     LoginComponent,
     RegisterComponent
   ],
-  providers: [
-    AuthService
-  ],
+  providers: [],
   exports: [
     LoginComponent,
     RegisterComponent,

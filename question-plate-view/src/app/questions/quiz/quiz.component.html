@@ -1,0 +1,5 @@
+<app-categories *ngIf="!(questionsService.currentQuestion$ | async); else question" />
+
+<ng-template #question>
+  <app-question />
+</ng-template>

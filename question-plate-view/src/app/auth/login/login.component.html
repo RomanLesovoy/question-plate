@@ -6,7 +6,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Пароль</ion-label>
+    <ion-label position="floating">Password</ion-label>
     <ion-input type="password" formControlName="password"></ion-input>
   </ion-item>
 
@@ -15,10 +15,10 @@
   </ion-text>
 
   <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="ion-margin-top">
-    Войти
+    Login
   </ion-button>
 
   <ion-button expand="block" fill="clear" (click)="goToRegister()">
-    Регистрация
+    Register
   </ion-button>
 </form>

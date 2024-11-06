@@ -70,10 +70,4 @@ export class AuthService {
       throw new UnauthorizedException('Invalid token');
     }
   }
-
-  async logout() {
-    // todo
-    // this.jwtService.sign({});
-    // return { message: 'Logout successful' };
-  }
 }

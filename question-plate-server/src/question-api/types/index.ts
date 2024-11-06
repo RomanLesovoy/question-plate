@@ -39,6 +39,7 @@ export interface Question {
 }
 
 export interface QuestionDto {
+  answers: string[] | null;
   correct_answer_hash: string;
   category: string;
   type: string;
@@ -52,10 +53,17 @@ export interface QuestionsResponse {
 }
 
 export interface AnsweredQuestion {
-  user_id: number;
+  userId: number;
+  answer: string | boolean;
   question: string;
   category_id: number;
   correct_answer_hash: string;
+}
+
+export interface AnsweredQuestionResponse {
+  is_correct: boolean;
+  answered_before: boolean;
+  correct_answer: string;
 }
 
 // Probably not needed

@@ -4,24 +4,24 @@
     <ion-input type="email" formControlName="email"></ion-input>
   </ion-item>
   <ion-note color="danger" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']">
-    Email обязателен
+    Email required
   </ion-note>
 
   <ion-item>
-    <ion-label position="floating">Пароль</ion-label>
+    <ion-label position="floating">Password</ion-label>
     <ion-input type="password" formControlName="password"></ion-input>
   </ion-item>
   <ion-note color="danger" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']">
-    Минимум 6 символов
+    Minimum 6 characters
   </ion-note>
 
   <ion-item>
-    <ion-label position="floating">Имя</ion-label>
+    <ion-label position="floating">Name</ion-label>
     <ion-input type="text" formControlName="name"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Фамилия</ion-label>
+    <ion-label position="floating">Lastname</ion-label>
     <ion-input type="text" formControlName="lastname"></ion-input>
   </ion-item>
 
@@ -30,10 +30,10 @@
   </ion-text>
 
   <ion-button expand="block" type="submit" [disabled]="!registerForm.valid" class="ion-margin-top">
-    Зарегистрироваться
+    Register
   </ion-button>
 
   <ion-button expand="block" fill="clear" (click)="goToLogin()">
-    Уже есть аккаунт? Войти
+    Already have an account? Login
   </ion-button>
 </form>

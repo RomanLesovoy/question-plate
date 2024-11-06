@@ -29,9 +29,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value as LoginDto).subscribe({
-        next: () => {
-          this.router.navigate(['/questions']);
-        },
+        next: () => {},
         error: (error) => {
           this.errorMessage = error.error?.message || 'Ошибка авторизации';
         }

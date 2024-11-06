@@ -1,25 +1,32 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Knex } from 'knex';
-import { AnsweredQuestion } from './types';
-import { compareQuestion, decryptQuestion, hashQuestion } from './crypto';
+import { AnsweredQuestion, AnsweredQuestionResponse } from './types';
+import { compareAnswer, decryptAnswer, hashAnswer } from './crypto';
 
 @Injectable()
 export class AnswerQuestionsRepository {
   constructor(@Inject('KNEX_CONNECTION') private readonly knex: Knex) {}
 
-  async saveAnsweredQuestion(data: AnsweredQuestion) {
-    const hashedQuestion = hashQuestion(data.question);
-    const is_correct = compareQuestion(data.question, data.correct_answer_hash);
+  async saveAnsweredQuestion(data: AnsweredQuestion): Promise<AnsweredQuestionResponse> {
+    const hashedAnswer = hashAnswer(String(data.answer).toLowerCase());
+    const is_correct = compareAnswer(String(data.answer).toLowerCase(), data.correct_answer_hash.toLowerCase());
 
-    const answered_before = await this.findAnsweredQuestion(data.user_id, data.category_id, data.question);
+    const answered_before = await this.findAnsweredQuestion(data.userId, data.category_id, data.question);
 
     await this.knex('answered_questions').insert({
-      ...data,
-      question: hashedQuestion,
+      answer: hashedAnswer,
+      user_id: data.userId,
       is_correct,
+      category_id: data.category_id,
+      question: data.question,
+      correct_answer_hash: data.correct_answer_hash,
     });
 
-    return { is_correct, answered_before, correct_answer: decryptQuestion(data.correct_answer_hash) };
+    return {
+      is_correct,
+      answered_before: !!answered_before,
+      correct_answer: decryptAnswer(data.correct_answer_hash)
+    };
   }
 
   // Probably not needed

@@ -2,9 +2,10 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { Question, QuestionApiParams, QuestionDto, QuestionsResponse, Category } from './types';
-import { hashQuestion } from './crypto';
-
+import { QuestionApiParams, QuestionDto, QuestionsResponse, Category } from './types';
+import { hashAnswer } from './crypto';
+import { decode } from 'html-entities';
+import { QuestionType } from './types';
 @Injectable()
 export class ExternalApiService {
   constructor(
@@ -21,12 +22,16 @@ export class ExternalApiService {
           params,
         })
       );
+
       return response.data.results.map(q => ({
         category: q.category,
         type: q.type,
         difficulty: q.difficulty,
-        question: q.question,
-        correct_answer_hash: hashQuestion(q.correct_answer)
+        question: decode(q.question),
+        answers: q.type === QuestionType.MULTIPLE
+          ? [decode(q.correct_answer), ...q.incorrect_answers.map(a => decode(a))].sort(() => Math.random() - 0.5)
+          : null,
+        correct_answer_hash: hashAnswer(decode(q.correct_answer).toLowerCase())
       }));
     } catch (error) {
       throw new HttpException(

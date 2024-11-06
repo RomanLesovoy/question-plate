@@ -5,6 +5,10 @@ export const User = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
     const user = request.user;
 
+    if (data && (!user || !user?.[data])) {
+      throw new Error('User not found or property not found');
+    }
+
     return data ? user?.[data] : user;
   },
 );
