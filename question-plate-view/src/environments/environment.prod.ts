@@ -1,5 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000/api', // todo
+  apiUrl: 'https://question-plate.onrender.com/api',
 };
-
