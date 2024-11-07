@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "create-db": "ts-node src/database/create-db.prod.ts",
     "build": "nest build && cp dist/knexfile.prod.js dist/src/knexfile.prod.js",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -17,7 +18,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate": "knex migrate:latest",
-    "migrate:prod": "NODE_ENV=production knex migrate:latest --knexfile dist/knexfile.prod.js",
+    "migrate:prod": "npm run create-db && NODE_ENV=production knex migrate:latest --knexfile dist/knexfile.prod.js",
     "migrate:rollback": "knex migrate:rollback",
     "migrate:make": "knex migrate:make"
   },
