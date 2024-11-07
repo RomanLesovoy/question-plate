@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginDto, RegisterDto, AuthResponseDto } from './dto/auth.dto';
@@ -44,22 +44,27 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-    const user = await this.usersService.create({
-      email: registerDto.email,
-      password: hashedPassword,
-    });
-
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        email: user.email,
-        created_at: user.created_at,
-        last_login: user.last_login
-      }
-    };
+    try {
+      const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+      const user = await this.usersService.create({
+        email: registerDto.email,
+        password: hashedPassword,
+      });
+  
+      const payload = { email: user.email, sub: user.id };
+      return {
+        access_token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          email: user.email,
+          created_at: user.created_at,
+          last_login: user.last_login
+        }
+      };
+    } catch (e) {
+      console.error(e);
+      throw new HttpException('Register error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async verifyToken(token: string): Promise<boolean> {

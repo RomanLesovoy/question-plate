@@ -1,49 +1,29 @@
-import * as crypto from 'crypto';
+import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypto';
 
-// Secret key should be stored in environment variables
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'your-secret-key-32-chars-long!!!';
-const IV_LENGTH = 16; // For AES, this is always 16
+const algorithm = 'aes-256-cbc';
+const key = scryptSync(process.env.JWT_SECRET || 'your-secret-key', 'salt', 32);
+const iv = randomBytes(16);
 
-export const hashAnswer = (answer: string): string => {
-  // Generate random initialization vector
-  const iv = crypto.randomBytes(IV_LENGTH);
-  
-  // Create cipher with key and iv
-  const cipher = crypto.createCipheriv(
-    'aes-256-cbc',
-    Buffer.from(ENCRYPTION_KEY),
-    iv
-  );
-  
-  // Encrypt the answer
-  let encrypted = cipher.update(answer, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  
-  // Return iv + encrypted (iv needed for decryption)
-  return iv.toString('hex') + ':' + encrypted;
-};
+export function hashAnswer(text: string): string {
+  const cipher = createCipheriv(algorithm, key, iv);
+  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+  return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+}
 
-export const decryptAnswer = (hashedAnswer: string): string => {
-  const [ivHex, encrypted] = hashedAnswer.split(':');
+export function decryptAnswer(hash: string): string {
+  const [ivHex, encryptedHex] = hash.split(':');
   const iv = Buffer.from(ivHex, 'hex');
-  const decipher = crypto.createDecipheriv(
-    'aes-256-cbc',
-    Buffer.from(ENCRYPTION_KEY),
-    iv
-  );
+  const encrypted = Buffer.from(encryptedHex, 'hex');
+  const decipher = createDecipheriv(algorithm, key, iv);
+  return Buffer.concat([decipher.update(encrypted), decipher.final()]).toString();
+}
 
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-
-  return decrypted;
-};
-
-export const compareAnswer = (answer: string, hashedAnswer: string): boolean => {
+export function compareAnswer(answer: string, hash: string): boolean {
   try {
-    const decrypted = decryptAnswer(hashedAnswer);
-    
-    return decrypted === answer;
-  } catch (error) {
+    const decrypted = decryptAnswer(hash);
+    return answer.toLowerCase() === decrypted.toLowerCase();
+  } catch (e) {
+    console.error('Error comparing answers:', e);
     return false;
   }
-};
+}
