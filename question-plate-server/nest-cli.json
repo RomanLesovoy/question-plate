@@ -4,5 +4,17 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true
-  }
+  },
+  "assets": [
+    {
+      "include": "database/migrations/*.ts",
+      "watchAssets": true,
+      "outDir": "dist/src"
+    },
+    {
+      "include": "knexfile.prod.ts",
+      "watchAssets": true,
+      "outDir": "dist"
+    }
+  ]
 }

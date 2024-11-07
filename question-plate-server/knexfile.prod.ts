@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { join } from 'path';
 config();
 
 module.exports = {
@@ -15,7 +16,9 @@ module.exports = {
     max: 10,
   },
   migrations: {
-    directory: './src/database/migrations',
+    directory: join(__dirname, 'src/database/migrations'),
     tableName: 'knex_migrations',
+    extension: 'ts',
+    loadExtensions: ['.ts'],
   },
 };
