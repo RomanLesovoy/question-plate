@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "create-db": "ts-node src/database/create-db.prod.ts",
-    "build": "nest build && cp dist/knexfile.prod.js dist/src/knexfile.prod.js",
+    "build": "nest build && cp dist/knexfile.prod.ts dist/src/knexfile.prod.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
