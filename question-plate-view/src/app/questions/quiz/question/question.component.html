@@ -1,5 +1,9 @@
 <section class="question" *ngIf="currentQuestion">
-  <h2>{{ currentQuestion.question }}</h2>
+  <ion-chip [outline]="true" (click)="this.questionsService.resetQuiz()">To Categories</ion-chip>
+
+  <ion-text color="tertiary">
+    <h2>{{ currentQuestion.question }}</h2>
+  </ion-text>
 
   <section class="answers" *ngIf="!result">
     @if (currentQuestion.type === this.questionType.BOOLEAN) {
@@ -17,5 +21,13 @@
       <h3>{{ result.is_correct ? 'Correct!' : 'Incorrect!' }}</h3>
       <p>Correct answer: {{ result.correct_answer }}</p>
     </ion-text>
+
+    @if (this.questionsService.isNextQuestionAvailable()) {
+      <ion-chip color="primary" (click)="this.questionsService.nextQuestion()">Next Question</ion-chip>
+    } @else {
+      <ion-text color="success">
+        <h3>You've answered all questions!</h3>
+      </ion-text>
+    }
   </section>
 </section>

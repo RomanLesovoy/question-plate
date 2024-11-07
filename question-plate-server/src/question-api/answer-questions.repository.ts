@@ -11,7 +11,8 @@ export class AnswerQuestionsRepository {
     const hashedAnswer = hashAnswer(String(data.answer).toLowerCase());
     const is_correct = compareAnswer(String(data.answer).toLowerCase(), data.correct_answer_hash.toLowerCase());
 
-    const answered_before = await this.findAnsweredQuestion(data.userId, data.category_id, data.question);
+    // todo: check if answered before (if needed)
+    const answered_before = false; // await this.findAnsweredQuestion(data.userId, data.category_id, data.question);
 
     await this.knex('answered_questions').insert({
       answer: hashedAnswer,
@@ -28,18 +29,6 @@ export class AnswerQuestionsRepository {
       correct_answer: decryptAnswer(data.correct_answer_hash)
     };
   }
-
-  // Probably not needed
-  // async getAnsweredQuestions(userId: number, categoryId: string): Promise<AnsweredQuestionDto[]> {
-  //   const answered: AnsweredQuestionDto[] = await this.knex('answered_questions')
-  //     .where({
-  //       user_id: userId,
-  //       category_id: categoryId,
-  //     })
-  //     .select();
-    
-  //   return answered;
-  // }
 
   async findAnsweredQuestion(userId: number, categoryId: number, question: string): Promise<AnsweredQuestion | null> {
     const answered: AnsweredQuestion = await this.knex('answered_questions')

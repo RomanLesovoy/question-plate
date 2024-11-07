@@ -63,20 +63,6 @@ export class QuestionApiController {
     return this.externalApiService.getCategories();
   }
 
-  // Probably not needed
-  // @Get('category-amount')
-  // @ApiOperation({ summary: 'Get amount of questions in category' })
-  // @ApiResponse({ 
-  //   status: HttpStatus.OK, 
-  //   description: 'Returns amount of questions in category',
-  // })
-  // @ApiQuery({ name: 'categoryId', required: true, type: String })
-  // async getCategoryAmount(
-  //   @Query('categoryId') categoryId: string
-  // ): Promise<CategoryAmount> {
-  //   return this.externalApiService.getCategoryAmount(categoryId);
-  // }
-
   @Post('answer')
   @ApiOperation({ summary: 'Save user answer' })
   @ApiResponse({ 

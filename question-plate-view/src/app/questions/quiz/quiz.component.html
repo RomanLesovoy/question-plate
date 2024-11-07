@@ -3,3 +3,5 @@
 <ng-template #question>
   <app-question />
 </ng-template>
+
+<ion-loading [isOpen]="(questionsService.isLoading$ | async) ?? false" />

@@ -13,7 +13,7 @@ export class QuestionComponent implements OnInit {
   questionType = QuestionType;
   result: { is_correct: boolean, correct_answer: string } | null = null;
 
-  constructor(private readonly questionsService: QuestionsService) {}
+  constructor(public readonly questionsService: QuestionsService) {}
 
   ngOnInit() {
     this.questionsService.currentQuestion$.subscribe(question => {
@@ -24,6 +24,14 @@ export class QuestionComponent implements OnInit {
     this.questionsService.currentCategory$.subscribe(category => {
       this.currentCategory = category?.id || null;
     });
+  }
+
+  toCategories() {
+    this.questionsService.resetQuiz();
+  }
+
+  nextQuestion() {
+    this.questionsService.nextQuestion();
   }
 
   answer(answer: boolean | string) {

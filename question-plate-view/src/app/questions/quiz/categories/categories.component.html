@@ -1,5 +1,7 @@
 <section class="categories">
-  <h1>Categories</h1>
+  <ion-text color="tertiary">
+    <h1>Categories</h1>
+  </ion-text>
 
   <ion-list>
     <ion-item *ngFor="let category of (questionsService.categories$ | async)" (click)="selectCategory(category)">

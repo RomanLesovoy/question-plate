@@ -16,7 +16,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     private router: Router,
   ) {
     this.subscription = new EventEmitterSingleton().subscribe({ on: 'topic', next: (value) => {
-      this.topic = ` / ${value}`;
+      this.topic = ` / ${value || ''}`;
     }})
   }
 

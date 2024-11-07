@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QuizComponent } from './quiz/quiz.component';
-import { RatingComponent } from './rating/rating.component';
 
 const routes: Routes = [
   {
@@ -9,11 +8,6 @@ const routes: Routes = [
     component: QuizComponent,
     title: 'Quiz'
   },
-  // {
-  //   path: 'rating',
-  //   component: RatingComponent,
-  //   title: 'Rating'
-  // },
   {
     path: '',
     redirectTo: 'quiz',
