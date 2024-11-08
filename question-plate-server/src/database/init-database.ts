@@ -8,13 +8,13 @@ export async function initDatabase() {
     port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
+    database: process.env.DB_NAME
   });
 
   try {
     await client.connect();
     
-    const dbName = process.env.DB_DATABASE;
+    const dbName = process.env.DB_NAME;
     const result = await client.query(
       'SELECT 1 FROM pg_database WHERE datname = $1',
       [dbName]
