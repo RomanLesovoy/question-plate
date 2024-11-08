@@ -17,20 +17,30 @@ async function clearDatabase() {
   try {
     console.log('Starting database cleanup...');
 
+    // Получаем все таблицы, исключая системные
     const tables = await knexInstance.raw(`
       SELECT tablename 
       FROM pg_tables 
-      WHERE schemaname = 'public'
+      WHERE schemaname = 'public' 
+      AND tablename != 'migrations'
+      AND tablename != 'migrations_lock'
     `);
 
-    await knexInstance.raw('SET session_replication_role = replica;');
+    // Отключаем проверку внешних ключей
+    await knexInstance.raw('SET CONSTRAINTS ALL DEFERRED');
 
+    // Очищаем таблицы
     for (const { tablename } of tables.rows) {
-      await knexInstance.raw(`TRUNCATE TABLE "${tablename}" CASCADE`);
-      console.log(`Table "${tablename}" cleared`);
+      try {
+        await knexInstance(tablename).del();
+        console.log(`Table "${tablename}" cleared`);
+      } catch (err) {
+        console.warn(`Warning: Could not clear table "${tablename}":`, err.message);
+      }
     }
 
-    await knexInstance.raw('SET session_replication_role = DEFAULT;');
+    // Включаем обратно проверку внешних ключей
+    await knexInstance.raw('SET CONSTRAINTS ALL IMMEDIATE');
 
     console.log('Database cleared successfully');
   } catch (error) {
