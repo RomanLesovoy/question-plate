@@ -57,6 +57,7 @@ export interface AnsweredQuestion {
   answer: string | boolean;
   question: string;
   category_id: number;
+  category_name: string;
   correct_answer_hash: string;
 }
 
@@ -66,7 +67,7 @@ export interface AnsweredQuestionResponse {
   correct_answer: string;
 }
 
-// Probably not needed
-// export interface AnsweredQuestionDto extends AnsweredQuestion {
-//   is_correct: boolean;
-// }
+export interface AnsweredQuestionStatsResponse {
+  category_id: number;
+  is_correct: boolean;
+}

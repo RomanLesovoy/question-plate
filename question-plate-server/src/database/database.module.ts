@@ -3,20 +3,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import knex from 'knex';
 import { initTables } from './init-tables';
 import { initDatabase } from './init-database';
+import { config } from 'dotenv';
+config();
 
 const databaseProvider = {
   provide: 'KNEX_CONNECTION',
-  useFactory: async (configService: ConfigService) => {
-    await initDatabase(configService);
+  useFactory: async () => {
+    await initDatabase();
 
     const knexInstance = knex({
       client: 'postgresql',
       connection: {
-        host: configService.get('database.host'),
-        port: configService.get('database.port'),
-        user: configService.get('database.username'),
-        password: configService.get('database.password'),
-        database: configService.get('database.database'),
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT || '5432'),
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE
       },
       pool: { min: 2, max: 10 },
     });

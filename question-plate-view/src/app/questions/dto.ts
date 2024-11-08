@@ -33,6 +33,7 @@ export interface QuestionApiParams {
 export interface AnswerQuestionParams {
   categoryId: number;
   question: string;
+  categoryName: string;
   correctAnswerHash: string;
   answer: string | boolean;
 }

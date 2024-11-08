@@ -18,6 +18,12 @@ export class UsersRepository {
       .first();
   }
 
+  async updatePoints(userId: number, points: number): Promise<void> {
+    await this.knex('users')
+      .where({ id: userId })
+      .update({ points });
+  }
+
   async create(userData: CreateUserDto): Promise<User> {
     const [user] = await this.knex('users')
       .insert({

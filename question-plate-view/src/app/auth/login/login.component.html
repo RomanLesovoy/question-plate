@@ -10,8 +10,8 @@
     <ion-input type="password" formControlName="password"></ion-input>
   </ion-item>
 
-  <ion-text color="danger" *ngIf="errorMessage">
-    <p class="ion-text-center">{{ errorMessage }}</p>
+  <ion-text color="danger" *ngIf="(authService.errorMessage$ | async) ?? false">
+    <p class="ion-text-center">{{ authService.errorMessage$ | async }}</p>
   </ion-text>
 
   <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="ion-margin-top">
@@ -22,3 +22,5 @@
     Register
   </ion-button>
 </form>
+
+<ion-loading class="login-loading" [isOpen]="(this.authService.isLoading$ | async) ?? false" />

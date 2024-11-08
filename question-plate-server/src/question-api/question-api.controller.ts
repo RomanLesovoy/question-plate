@@ -11,7 +11,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ExternalApiService } from './question-api.service';
-import { QuestionApiParams, QuestionDifficulty, QuestionType, Category, QuestionDto, AnsweredQuestionResponse } from './types';
+import { QuestionApiParams, QuestionDifficulty, QuestionType, Category, QuestionDto, AnsweredQuestionResponse, AnsweredQuestionStatsResponse } from './types';
 import { AnswerQuestionsRepository } from './answer-questions.repository';
 import { User } from 'src/auth/user.decorator';
 
@@ -53,6 +53,16 @@ export class QuestionApiController {
     return questions;
   }
 
+  @Get('answered-questions')
+  @ApiOperation({ summary: 'Get all answered questions' })
+  @ApiResponse({ 
+    status: HttpStatus.OK, 
+    description: 'Returns list of answered questions',
+  })
+  async getAnsweredQuestions(@User('userId') userId: number): Promise<AnsweredQuestionStatsResponse[]> {
+    return this.answerQuestionsRepository.getAnsweredQuestions(userId);
+  }
+
   @Get('categories')
   @ApiOperation({ summary: 'Get all available categories' })
   @ApiResponse({ 
@@ -76,6 +86,7 @@ export class QuestionApiController {
       question: string;
       correctAnswerHash: string;
       answer: string | boolean;
+      categoryName: string;
     }
   ): Promise<AnsweredQuestionResponse> {
     const result = await this.answerQuestionsRepository.saveAnsweredQuestion({
@@ -84,11 +95,8 @@ export class QuestionApiController {
       answer: answerData.answer,
       category_id: answerData.categoryId,
       correct_answer_hash: answerData.correctAnswerHash,
+      category_name: answerData.categoryName,
     });
-
-    if (result.is_correct && !result.answered_before) {
-      // todo add points to user
-    }
 
     return result;
   }

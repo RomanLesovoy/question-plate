@@ -1,0 +1,61 @@
+<ion-alert *ngIf="errorMessage" [isOpen]="!!errorMessage" [header]="errorMessage" />
+
+<ion-content class="ion-padding" *ngIf="errorMessage">
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p class="ion-text-center">{{ errorMessage }}</p>
+  </ion-text>
+</ion-content>
+
+<ion-content class="ion-padding" *ngIf="user">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Information</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Email</h2>
+            <p>{{ user.email }}</p>
+          </ion-label>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label>
+            <h2>Points</h2>
+            <p>{{ user.points }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h2>Registration date</h2>
+            <p>{{ user.created_at | date }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Category statistics</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let stat of userStats">
+          <ion-label>
+            <h2>{{ stat.categoryName }}</h2>
+            <p>Correct answers: {{ stat.correct }} from {{ stat.total }}</p>
+            <ion-progress-bar
+              [value]="getProgressPercentage(stat.correct, stat.total) / 100"
+              [color]="getProgressPercentage(stat.correct, stat.total) > 70 ? 'success' : 'warning'"
+            ></ion-progress-bar>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-loading class="profile-loading" [isOpen]="(this.profileService.isLoading$ | async) ?? false" />

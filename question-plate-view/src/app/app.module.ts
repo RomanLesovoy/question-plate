@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HeaderComponent } from './partials/header/header.component';
 import { jwtInterceptor } from './auth/interceptors/jwt.interceptor';
+import { LayoutModule } from './layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { jwtInterceptor } from './auth/interceptors/jwt.interceptor';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    LayoutModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

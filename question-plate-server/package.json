@@ -11,8 +11,11 @@
     "build": "nest build",
     "start:prod": "npm run create-db && npm run migrate:prod && node dist/src/main",
     "create-db": "ts-node src/database/create-db.prod.ts",
-    "migrate": "knex migrate:latest --knexfile knexfile.ts",
-    "migrate:prod": "ts-node --transpile-only ./node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.prod.ts"
+    "migrate": "ts-node --transpile-only ./node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.ts",
+    "migrate:prod": "ts-node --transpile-only ./node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.prod.ts",
+    "db:clear": "ts-node src/database/clear-db.ts",
+    "db:reset": "npm run db:clear && npm run migrate",
+    "db:reset:prod": "npm run db:clear && npm run migrate:prod"
   },
   "dependencies": {
     "@nestjs/axios": "^3.1.1",

@@ -17,23 +17,25 @@ export class QuestionsService {
   private readonly currentCategory: BehaviorSubject<Category | null> = new BehaviorSubject<Category | null>(null);
   private readonly currentQuestion: BehaviorSubject<QuestionDto | null> = new BehaviorSubject<QuestionDto | null>(null);
   private readonly isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly errorMessage: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   public readonly categories$ = this.categories.asObservable().pipe(filter(Boolean));
   public readonly questions$ = this.questions.asObservable().pipe(filter(Boolean));
   public readonly currentCategory$ = this.currentCategory.asObservable();
   public readonly currentQuestion$ = this.currentQuestion.asObservable();
   public readonly isLoading$ = this.isLoading.asObservable();
+  public readonly errorMessage$ = this.errorMessage.asObservable();
 
   constructor(private readonly http: HttpClient) {
     const emitter = new EventEmitterSingleton();
 
     this.getCategories$().subscribe(categories => {
-      this.categories.next(categories);
+      this.categories.next(categories || []);
     });
 
     this.currentCategory$.pipe(
+      tap(category => emitter.emit('topic', category?.name || '')),
       filter(Boolean),
-      tap(category => emitter.emit('topic', category?.name)),
       switchMap(category => this.getQuestions$({ category: category?.id })),
       tap(questions => {
         if (questions) {
@@ -54,6 +56,7 @@ export class QuestionsService {
       throttleTime(5000),
       catchError(error => {
         console.error(error);
+        this.errorMessage.next(error.error?.message || 'Error loading questions');
         return of(null);
       }),
       finalize(() => this.isLoading.next(false)),
@@ -63,6 +66,11 @@ export class QuestionsService {
   answerQuestion$(params: AnswerQuestionParams) {
     this.isLoading.next(true);
     return this.http.post<AnsweredQuestionResponse>(`${this.API_URL}/answer`, params).pipe(
+      catchError(error => {
+        console.error(error);
+        this.errorMessage.next(error.error?.message || 'Error answering question');
+        return of(null);
+      }),
       finalize(() => this.isLoading.next(false)),
     );
   }
@@ -89,6 +97,12 @@ export class QuestionsService {
   getCategories$() {
     this.isLoading.next(true);
     return this.http.get<Category[]>(`${this.API_URL}/categories`).pipe(
+      throttleTime(3000),
+      catchError(error => {
+        console.error(error);
+        this.errorMessage.next(error.error?.message || 'Error loading categories');
+        return of(null);
+      }),
       finalize(() => this.isLoading.next(false)),
     );
   }

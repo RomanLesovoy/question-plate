@@ -25,8 +25,8 @@
     <ion-input type="text" formControlName="lastname"></ion-input>
   </ion-item>
 
-  <ion-text color="danger" *ngIf="errorMessage">
-    <p class="ion-text-center">{{ errorMessage }}</p>
+  <ion-text color="danger" *ngIf="(authService.errorMessage$ | async) ?? false">
+    <p class="ion-text-center">{{ authService.errorMessage$ | async }}</p>
   </ion-text>
 
   <ion-button expand="block" type="submit" [disabled]="!registerForm.valid" class="ion-margin-top">
@@ -37,3 +37,5 @@
     Already have an account? Login
   </ion-button>
 </form>
+
+<ion-loading class="register-loading" [isOpen]="(this.authService.isLoading$ | async) ?? false" />

@@ -1,6 +1,5 @@
 import { Client } from 'pg';
 import { config } from 'dotenv';
-
 config();
 
 async function createDatabase() {
@@ -9,7 +8,7 @@ async function createDatabase() {
     port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: 'postgres'
+    database: process.env.DB_DATABASE
   });
 
   try {

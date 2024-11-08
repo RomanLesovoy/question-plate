@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { QuestionsService } from '../questions.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-quiz',
@@ -7,5 +8,9 @@ import { QuestionsService } from '../questions.service';
   styleUrls: ['./quiz.component.scss']
 })
 export class QuizComponent {
-  constructor(public readonly questionsService: QuestionsService) {}
+  public errorMessage$: Observable<string | null>;
+
+  constructor(public readonly questionsService: QuestionsService) {
+    this.errorMessage$ = this.questionsService.errorMessage$;
+  }
 }

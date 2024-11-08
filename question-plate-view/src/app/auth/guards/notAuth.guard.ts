@@ -16,7 +16,7 @@ export class NotAuthGuard implements CanActivate, CanActivateChild {
         if (!isAuthenticated) {
           return true;
         }
-        return this.router.createUrlTree(['/questions']);
+        return this.router.createUrlTree(['/user']);
       })
     );
   }

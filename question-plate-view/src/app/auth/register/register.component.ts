@@ -10,12 +10,11 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -27,12 +26,7 @@ export class RegisterComponent {
 
   async onSubmit() {
     if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
-        next: () => {},
-        error: (error) => {
-          this.errorMessage = error.error?.message || 'Registration error';
-        }
-      });
+      this.authService.register(this.registerForm.value);
     }
   }
 

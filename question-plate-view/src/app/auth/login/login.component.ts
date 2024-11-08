@@ -11,12 +11,11 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,12 +27,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value as LoginDto).subscribe({
-        next: () => {},
-        error: (error) => {
-          this.errorMessage = error.error?.message || 'Ошибка авторизации';
-        }
-      });
+      this.authService.login(this.loginForm.value as LoginDto);
     }
   }
 

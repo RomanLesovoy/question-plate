@@ -1,0 +1,13 @@
+<ion-router-outlet></ion-router-outlet>
+
+<ion-tab-bar slot="bottom" class="bottom-menu">
+  <ion-tab-button [routerLink]="['/user/questions']" routerLinkActive="tab-selected">
+    <ion-icon name="help-circle-outline"></ion-icon>
+    <ion-label>Questions</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button [routerLink]="['/user/profile']" routerLinkActive="tab-selected">
+    <ion-icon name="person-outline"></ion-icon>
+    <ion-label>Profile</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

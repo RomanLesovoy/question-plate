@@ -1,19 +1,20 @@
 import { Client } from 'pg';
-import { ConfigService } from '@nestjs/config';
+import { config } from 'dotenv';
+config();
 
-export async function initDatabase(configService: ConfigService) {
+export async function initDatabase() {
   const client = new Client({
-    host: configService.get('database.host'),
-    port: configService.get('database.port'),
-    user: configService.get('database.username'),
-    password: configService.get('database.password'),
-    database: 'postgres',
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
   });
 
   try {
     await client.connect();
     
-    const dbName = configService.get('database.database');
+    const dbName = process.env.DB_DATABASE;
     const result = await client.query(
       'SELECT 1 FROM pg_database WHERE datname = $1',
       [dbName]

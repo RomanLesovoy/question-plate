@@ -4,4 +4,16 @@
   <app-question />
 </ng-template>
 
-<ion-loading [isOpen]="(questionsService.isLoading$ | async) ?? false" />
+<ion-alert
+  *ngIf="this.errorMessage$ | async"
+  [isOpen]="!!(this.errorMessage$ | async)"
+  [header]="this.errorMessage$ | async"
+/>
+
+<ion-content class="ion-padding" *ngIf="this.errorMessage$ | async">
+  <ion-text color="danger">
+    <p class="ion-text-center">{{ this.errorMessage$ | async }}</p>
+  </ion-text>
+</ion-content>
+
+<ion-loading class="quiz-loading" [isOpen]="(this.questionsService.isLoading$ | async) ?? false" />
