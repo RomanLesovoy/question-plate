@@ -23,8 +23,9 @@ export class UsersService {
     return this.usersRepository.create(userData);
   }
 
-  async updatePoints(userId: number, points: number): Promise<void> {
-    await this.usersRepository.updatePoints(userId, points);
+  async incrementPoints(userId: number, points: number): Promise<void> {
+    const userPoints = await this.usersRepository.findPoints(userId);
+    await this.usersRepository.updatePoints(userId, userPoints + points);
   }
 
   async updateLastLogin(userId: number): Promise<void> {

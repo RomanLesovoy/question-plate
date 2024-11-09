@@ -29,7 +29,7 @@ export class AnswerQuestionsRepository {
 
     // todo maybe move to process
     if (is_correct && !answered_before) {
-      await this.usersService.updatePoints(data.userId, 10);
+      await this.usersService.incrementPoints(data.userId, 10);
     }
 
     return {

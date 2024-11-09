@@ -24,6 +24,13 @@ export class UsersRepository {
       .update({ points });
   }
 
+  async findPoints(userId: number): Promise<number> {
+    const user = await this.knex('users')
+      .where({ id: userId })
+      .first();
+    return user?.points || 0;
+  }
+
   async create(userData: CreateUserDto): Promise<User> {
     const [user] = await this.knex('users')
       .insert({
